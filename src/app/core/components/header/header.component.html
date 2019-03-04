@@ -1,0 +1,14 @@
+<nz-header style="position:fixed; width:100%">
+  <div class="headerNav">
+    <h3>Small Educator</h3>
+    <ul nz-menu [nzTheme]="'dark'" [nzMode]="'horizontal'" style="line-height: 64px;">
+      <li nz-menu-item routerLink="/course" routerLinkActive="ant-menu-item-selected">Course</li>
+      <li nz-submenu style="float:right;">
+        <span title>{{ name }}</span>
+        <ul>
+          <li nz-menu-item (click)="logout()">Log out</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nz-header>

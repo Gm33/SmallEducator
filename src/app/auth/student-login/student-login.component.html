@@ -1,0 +1,22 @@
+<div>
+  <h2>Small Educator</h2>
+  <nz-card nz-form style="width:300px;">
+    <nz-form-item>
+      <nz-form-control>
+        <label>Entry number</label>
+        <nz-input-group [nzPrefix]="prefixLock">
+          <input type="text" nz-input [(ngModel)]="entryNumber" placeholder="Course entry number..." [disabled]="isLoading" (ngModelChange)="onValueChange($event)">
+        </nz-input-group>
+        <nz-form-explain *ngIf="inputError">Please input a valid entry number!</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control>
+        <button block nz-button nzType="primary" type="button" [nzLoading]="isLoading" (click)="login()">
+          {{ isLoading ? 'Logging in...' : 'Log in!' }}
+        </button>
+      </nz-form-control>
+    </nz-form-item>
+  </nz-card>
+</div>
+<ng-template #prefixLock><i nz-icon type="lock"></i></ng-template>

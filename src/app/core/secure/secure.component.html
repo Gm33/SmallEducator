@@ -1,0 +1,13 @@
+<nz-layout class="layout">
+  <app-header></app-header>
+  <nz-content style="margin-top:64px;">
+    <nz-breadcrumb class="secureBreadcrumb" *ngIf="breadcrumbs?.length">
+      <nz-breadcrumb-item>Home</nz-breadcrumb-item>
+      <nz-breadcrumb-item *ngFor="let breadcrumb of breadcrumbs">{{ breadcrumb }}</nz-breadcrumb-item>
+    </nz-breadcrumb>
+    <div class="secureContent">
+      <ng-content></ng-content>
+    </div>
+  </nz-content>
+  <app-footer></app-footer>
+</nz-layout>
