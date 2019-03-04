@@ -34,7 +34,14 @@ export class StudentProvider {
         "requirements, software quality attributes, and design patterns."
       }
     }).pipe(delay(500))
-      .pipe(map((e: Student) => this.student = e));
+      .pipe(map((e: Student) => {
+        // If valid login, store entry number and save returned student in scope.
+        if (e.id) {
+          this.student = e;
+          this.storeEentryNumber(entryNumber);
+        }
+        return e;
+      }));
 
     return this.http.post(this.apiUrl, {
       entryNumber: entryNumber
