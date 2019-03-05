@@ -19,7 +19,7 @@ export class HeaderComponent implements OnInit {
    * Method gets called after the component gets initialized, to display the student's name in the scope.
    */
   ngOnInit() {
-    this.name = this.studentProvider.student.name;
+    this.name = this.studentProvider.student.firstName + this.studentProvider.student.lastName;
   }
 
   /**

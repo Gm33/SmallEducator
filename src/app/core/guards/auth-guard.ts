@@ -26,7 +26,7 @@ export class AuthGuard implements CanActivate {
     }
     // Log student in by using the stored entry code.
     return this.studentProvider.loadStudentProfile().pipe(map(response => {
-      return response.id ? true : false;
+      return response.firstName ? true : false;
     }))
   }
 }

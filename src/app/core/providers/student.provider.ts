@@ -10,7 +10,7 @@ import { Student } from "../interfaces/student";
 export class StudentProvider {
 
   private smEntryNumber = 'smEntryNumber';
-  private apiUrl = 'https://api.smalleducator.com/';
+  private apiUrl = 'tijmen.dev:1050/api/student/';
   public student: Student;
 
   constructor(private http: HttpClient) {
@@ -21,33 +21,35 @@ export class StudentProvider {
    * @param {number} entryNumber
    * @returns {Observable<Student>}
    */
-  signInWithEntryNumber(entryNumber: number): Observable<Student> {
-    return of<Student>({
-      id: 1,
-      name: 'Gijs Min',
-      course: {
-        name: 'Architecture & Design',
-        description: "The course of Architecture and Design is about explaining the design choices that must be" +
-        "made while designing a software system.\n\n" +
-        "Students work in groups to solve a real-life problem. This problem is presented in a case" +
-        "study.\nThe focus points of the solution are the wishes of the stakeholders, functional " +
-        "requirements, software quality attributes, and design patterns."
-      }
-    }).pipe(delay(500))
-      .pipe(map((e: Student) => {
-        // If valid login, store entry number and save returned student in scope.
-        if (e.id) {
-          this.student = e;
-          this.storeEentryNumber(entryNumber);
-        }
-        return e;
-      }));
+  signInWithEntryNumber(entryNumber: string): Observable<Student> {
+    // return of<Student>({
+    //   id: 1,
+    //   name: 'Gijs Min',
+    //   course: {
+    //     name: 'Architecture & Design',
+    //     description: "The course of Architecture and Design is about explaining the design choices that must be" +
+    //     "made while designing a software system.\n\n" +
+    //     "Students work in groups to solve a real-life problem. This problem is presented in a case" +
+    //     "study.\nThe focus points of the solution are the wishes of the stakeholders, functional " +
+    //     "requirements, software quality attributes, and design patterns."
+    //   }
+    // }).pipe(delay(500))
+    //   .pipe(map((e: Student) => {
+    //     // If valid login, store entry number and save returned student in scope.
+    //     if (e.firstName) {
+    //       this.student = e;
+    //       this.storeEentryNumber(entryNumber);
+    //     }
+    //     return e;
+    //   }));
 
-    return this.http.post(this.apiUrl, {
+    console.log('hoi?', entryNumber);
+
+    return this.http.post(this.apiUrl + entryNumber, {
       entryNumber: entryNumber
     }).pipe(map((e: Student) => {
       // If valid login, store entry number and save returned student in scope.
-      if (e.id) {
+      if (e.firstName) {
         this.student = e;
         this.storeEentryNumber(entryNumber);
       }
@@ -62,7 +64,8 @@ export class StudentProvider {
    * @returns {boolean}
    */
   isAuthenticated(): boolean {
-    return localStorage.getItem(this.smEntryNumber) && localStorage.getItem(this.smEntryNumber).match(/^\d{10}$/) !== null;
+    return localStorage.getItem(this.smEntryNumber) && localStorage.getItem(this.smEntryNumber).match(/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/) !== null;
+    // localStorage.getItem(this.smEntryNumber).match(/^\d{10}$/) !== null;
   }
 
   /**
@@ -71,15 +74,15 @@ export class StudentProvider {
    * @returns {Observable<Student>}
    */
   loadStudentProfile(): Observable<Student> {
-    return this.signInWithEntryNumber(+localStorage.getItem(this.smEntryNumber));
+    return this.signInWithEntryNumber(localStorage.getItem(this.smEntryNumber));
   }
 
   /**
    * Stored the entry number in the local storage.
    * @param {number} entryNumber
    */
-  storeEentryNumber(entryNumber: number): void {
-    localStorage.setItem(this.smEntryNumber, "" + entryNumber);
+  storeEentryNumber(entryNumber: string): void {
+    localStorage.setItem(this.smEntryNumber, entryNumber);
   }
 
   /**

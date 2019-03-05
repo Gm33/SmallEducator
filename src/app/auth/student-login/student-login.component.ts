@@ -35,10 +35,12 @@ export class StudentLoginComponent {
     }
 
     // Call the REST API using the Student provider.
-    this.studentProvider.signInWithEntryNumber(+this.entryNumber).subscribe(response => {
+    this.studentProvider.signInWithEntryNumber(this.entryNumber).subscribe(response => {
       // If valid student response then navigate to the secure screen.
-      if (response.id) {
+      if (response.firstName) {
         this.router.navigate(['/course']);
+      } else {
+        this.message.create('error', 'You\'ve entered an incorrect entry number, please try again.');
       }
       this.isLoading = false;
     }, error => {
@@ -65,6 +67,6 @@ export class StudentLoginComponent {
    * @returns {boolean}
    */
   isValidEntryNumber(entryNumber): boolean {
-    return entryNumber && entryNumber.match(/^\d{10}$/);
+    return entryNumber && entryNumber.match(/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/); //  && entryNumber.match(/^\d{10}$/);
   }
 }

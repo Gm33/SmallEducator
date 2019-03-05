@@ -2,11 +2,10 @@
  * Interface for the student model.
  */
 export interface Student {
-  id: number;
-  name: string;
+  firstName: string;
+  lastName: string;
 
-  course?: {
-    name: string;
-    description: string;
-  }
+  courseName: string;
+  courseCode: string;
+  courseDescription: string;
 }
