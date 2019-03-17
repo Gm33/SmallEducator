@@ -10,42 +10,54 @@ import { Student } from "../interfaces/student";
 export class StudentProvider {
 
   private smEntryNumber = 'smEntryNumber';
-  private apiUrl = 'tijmen.dev:1050/api/student/';
+  private apiUrl = 'tijmen.dev:1050/api/';
   public student: Student;
 
   constructor(private http: HttpClient) {
   }
 
   /**
-   * HTTP Method to post entry number to the REST API which returns an student (if valid entry number)
+   * HTTP Method to post entry number to the REST API which returns a student (if valid entry number)
    * @param {number} entryNumber
    * @returns {Observable<Student>}
    */
   signInWithEntryNumber(entryNumber: string): Observable<Student> {
-    // return of<Student>({
-    //   id: 1,
-    //   name: 'Gijs Min',
-    //   course: {
-    //     name: 'Architecture & Design',
-    //     description: "The course of Architecture and Design is about explaining the design choices that must be" +
-    //     "made while designing a software system.\n\n" +
-    //     "Students work in groups to solve a real-life problem. This problem is presented in a case" +
-    //     "study.\nThe focus points of the solution are the wishes of the stakeholders, functional " +
-    //     "requirements, software quality attributes, and design patterns."
-    //   }
-    // }).pipe(delay(500))
-    //   .pipe(map((e: Student) => {
-    //     // If valid login, store entry number and save returned student in scope.
-    //     if (e.firstName) {
-    //       this.student = e;
-    //       this.storeEentryNumber(entryNumber);
-    //     }
-    //     return e;
-    //   }));
+    return of<Student>({
+      id: 1,
+      firstName: 'Gijs',
+      lastName: 'Min',
+      courseList: [
+        {
+          id: 123,
+          courseName: 'Architecture & Design',
+          courseCode: 'AAD123',
+          courseDescription: "The course of Architecture and Design is about explaining the design choices that must be" +
+          "made while designing a software system.\n\n" +
+          "Students work in groups to solve a real-life problem. This problem is presented in a case" +
+          "study.\nThe focus points of the solution are the wishes of the stakeholders, functional " +
+          "requirements, software quality attributes, and design patterns.",
+          teacher: {
+            id: 1,
+            firstName: 'Gijs',
+            lastName: 'Min',
+            mailAddress: 'gijs.min@hva.nl'
+          },
+          students: []
+        }
+      ]
+    }).pipe(delay(500))
+      .pipe(map((e: Student) => {
+        // If valid login, store entry number and save returned student in scope.
+        if (e.firstName) {
+          this.student = e;
+          this.storeEentryNumber(entryNumber);
+        }
+        return e;
+      }));
 
     console.log('hoi?', entryNumber);
 
-    return this.http.post(this.apiUrl + entryNumber, {
+    return this.http.post(this.apiUrl + 'student/' + entryNumber, {
       entryNumber: entryNumber
     }).pipe(map((e: Student) => {
       // If valid login, store entry number and save returned student in scope.
@@ -56,6 +68,11 @@ export class StudentProvider {
       return e;
     }));
   }
+
+  getStudents(): Observable<Student[]> {
+    return this.http.get(this.apiUrl + 'students');
+  }
+
 
   /**
    * Method to validate if an entry number has been stored into the local storage of the browser.

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StudentProvider } from "../../providers/student.provider";
 import { Router } from "@angular/router";
+import { TeacherProvider } from "../../providers/teacher.provider";
 
 @Component({
   selector: 'app-header',
@@ -12,6 +13,7 @@ export class HeaderComponent implements OnInit {
   name: string;
 
   constructor(private studentProvider: StudentProvider,
+              private teacherProvider: TeacherProvider,
               private router: Router) {
   }
 
@@ -19,14 +21,22 @@ export class HeaderComponent implements OnInit {
    * Method gets called after the component gets initialized, to display the student's name in the scope.
    */
   ngOnInit() {
-    this.name = this.studentProvider.student.firstName + this.studentProvider.student.lastName;
+    if (this.teacherProvider.isTeacher()) {
+      this.name = this.teacherProvider.teacher.firstName + ' ' + this.teacherProvider.teacher.lastName;
+    } else {
+      this.name = this.studentProvider.student.firstName + ' ' + this.studentProvider.student.lastName;
+    }
   }
 
   /**
    * Method to remove the entry number from local storage and navigates the user to the login page.
    */
   logout() {
-    this.studentProvider.removeEntryNumber();
+    if (this.teacherProvider.isTeacher()) {
+      this.teacherProvider.removeTeacherInformation();
+    } else {
+      this.studentProvider.removeEntryNumber();
+    }
     this.router.navigate(['/login']);
   }
 

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 
 @Component({
   selector: 'app-secure',
@@ -8,6 +8,8 @@ import { Component, Input, OnInit } from '@angular/core';
 export class SecureComponent implements OnInit {
 
   @Input('breadcrumbs') breadcrumbs: string[];
+  @Input('title') title: string;
+  @Input('extra') extra: TemplateRef<void>;
 
   constructor() { }
 

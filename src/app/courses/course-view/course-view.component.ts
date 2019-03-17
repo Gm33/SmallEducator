@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { StudentProvider } from "../../core/providers/student.provider";
 import { Student } from "../../core/interfaces/student";
+import { TeacherProvider } from "../../core/providers/teacher.provider";
+import { ActivatedRoute } from "@angular/router";
+import { Course } from "../../core/interfaces/course";
 
 @Component({
   selector: 'app-course-view',
@@ -9,15 +12,23 @@ import { Student } from "../../core/interfaces/student";
 })
 export class CourseViewComponent implements OnInit {
 
-  student: Student;
+  course: Course;
 
-  constructor(private studentProvider: StudentProvider) { }
+  constructor(private studentProvider: StudentProvider,
+              private teacherProvider: TeacherProvider,
+              private activatedRoute: ActivatedRoute) { }
 
   /**
    * Method gets called after the component gets initialized, then the student gets loaded in the scope to display.
    */
   ngOnInit() {
-    this.student = this.studentProvider.student;
+    this.activatedRoute.params.subscribe(params => {
+      if (this.teacherProvider.isTeacher()) {
+        this.course = this.teacherProvider.teacher.courseList.find(c => c.id === +params['id']);
+      } else {
+        this.course = this.studentProvider.student.courseList.find(c => c.id === +params['id']);
+      }
+    });
   }
 
 }

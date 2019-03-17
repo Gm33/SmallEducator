@@ -1,0 +1,66 @@
+<app-secure [breadcrumbs]="['Courses']" title="Courses" [extra]="extraTemplate">
+  <nz-list
+    [nzDataSource]="courses"
+    [nzItemLayout]="'horizontal'"
+    [nzLoading]="initLoading"
+    [nzRenderItem]="course">
+    <ng-template #course let-course>
+      <nz-list-item>
+        <nz-list-item-meta
+          [nzTitle]="nzTitle"
+          [nzDescription]="course.courseDescription">
+          <ng-template #nzTitle>
+            <a [routerLink]="['/','courses', course.id]">{{ course.courseName }}</a>
+          </ng-template>
+        </nz-list-item-meta>
+      </nz-list-item>
+    </ng-template>
+  </nz-list>
+</app-secure>
+
+<ng-template #extraTemplate>
+  <a (click)="openCreateCourseModal()" *ngIf="teacherProvider.isTeacher()">Add Course</a>
+</ng-template>
+
+<nz-drawer [nzBodyStyle]="{ height: 'calc(100% - 55px)', overflow: 'auto', 'padding-bottom':'53px' }"
+           [nzMaskClosable]="false" [nzWidth]="400" [nzVisible]="createCourseModalVisible" nzTitle="Create Course"
+           (nzOnClose)="closeCreateCourseModal()" *ngIf="teacherProvider.isTeacher()">
+  <form nz-form>
+    <nz-form-item>
+      <nz-form-label>Course Name</nz-form-label>
+      <nz-form-control>
+        <input nz-input [(ngModel)]="newCourse.name" (ngModelChange)="onValueChange($event)"
+               name="courseName" placeholder="Please enter the course name">
+      </nz-form-control>
+      <nz-form-explain *ngIf="inputError && !newCourse.name?.length">
+        Please input a course name!
+      </nz-form-explain>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label>Course Code</nz-form-label>
+      <nz-form-control>
+        <input type="text" nz-input [(ngModel)]="newCourse.code" (ngModelChange)="onValueChange($event)"
+               name="courseCode" placeholder="Please enter the course code">
+      </nz-form-control>
+      <nz-form-explain *ngIf="inputError && !newCourse.code?.length">
+        Please input a course code!
+      </nz-form-explain>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label>Course Description</nz-form-label>
+      <nz-form-control>
+        <textarea nz-input [(ngModel)]="newCourse.description" (ngModelChange)="onValueChange($event)"
+                  name="courseDescription" placeholder="Please enter the course description" rows="8"></textarea>
+      </nz-form-control>
+      <nz-form-explain *ngIf="inputError && !newCourse.description?.length">
+        Please input a course description!
+      </nz-form-explain>
+    </nz-form-item>
+  </form>
+  <div class="modalFooter">
+    <button type="button" (click)="closeCreateCourseModal()" class="ant-btn" style="margin-right: 8px;">
+      <span>Cancel</span></button>
+    <button type="button" (click)="submitCreateCourse()" class="ant-btn ant-btn-primary"><span>Create Course</span>
+    </button>
+  </div>
+</nz-drawer>

@@ -1,4 +1,3 @@
-<app-secure [breadcrumbs]="['Course', student?.courseName]">
-  <h2>{{ student?.courseName }}</h2>
-  <p>{{ student?.courseDescription }}</p>
+<app-secure [breadcrumbs]="['Courses', course?.courseName]" [title]="course?.courseName">
+  <p>{{ course?.courseDescription }}</p>
 </app-secure>

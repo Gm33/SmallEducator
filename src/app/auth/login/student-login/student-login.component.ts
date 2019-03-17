@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { StudentProvider } from "../../core/providers/student.provider";
+import { StudentProvider } from "../../../core/providers/student.provider";
 import { NzMessageService } from "ng-zorro-antd";
 import { Router } from "@angular/router";
 

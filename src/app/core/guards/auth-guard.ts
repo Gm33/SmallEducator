@@ -3,11 +3,14 @@ import { Router, CanActivate } from '@angular/router';
 import { StudentProvider } from "../providers/student.provider";
 import { Observable, of } from "rxjs/index";
 import { map } from "rxjs/internal/operators";
+import { TeacherProvider } from "../providers/teacher.provider";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
 
-  constructor(public studentProvider: StudentProvider, public router: Router) {
+  constructor(public studentProvider: StudentProvider,
+              public teacherProvider: TeacherProvider,
+              public router: Router) {
   }
 
   /**
@@ -16,12 +19,17 @@ export class AuthGuard implements CanActivate {
    */
   canActivate(): Observable<boolean> {
     // Check if authenticated, if not then redirect to login page.
-    if (!this.studentProvider.isAuthenticated()) {
+    if (!this.studentProvider.isAuthenticated() && !this.teacherProvider.isAuthenticated()) {
       this.router.navigate(['login']);
       return of(false);
     }
     // Check if student variable is already in provider, if so then let through (happens after login).
-    if (this.studentProvider.student) {
+    if (this.studentProvider.student || this.teacherProvider.teacher) {
+      return of(true);
+    }
+
+    // If a teacher profile can be loaded, then allow to continue
+    if (this.teacherProvider.loadTeacherProfile()) {
       return of(true);
     }
     // Log student in by using the stored entry code.

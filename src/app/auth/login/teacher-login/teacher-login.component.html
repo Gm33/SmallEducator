@@ -1,0 +1,29 @@
+<div nz-form>
+  <nz-form-item>
+    <nz-form-control>
+      <label>Username</label>
+      <nz-input-group [nzPrefix]="prefixUser">
+        <input type="text" nz-input [(ngModel)]="username" placeholder="Teacher's username"
+               [disabled]="isLoading" (ngModelChange)="onValueChange($event)">
+      </nz-input-group>
+      <nz-form-explain *ngIf="inputError && !username?.length">Please input a valid username!</nz-form-explain>
+    </nz-form-control>
+    <nz-form-control>
+      <label>Password</label>
+      <nz-input-group [nzPrefix]="prefixLock">
+        <input type="text" nz-input [(ngModel)]="password" placeholder="Teacher's password"
+               [disabled]="isLoading" (ngModelChange)="onValueChange($event)">
+      </nz-input-group>
+      <nz-form-explain *ngIf="inputError && !password?.length">Please input a valid password!</nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control>
+      <button block nz-button nzType="primary" type="button" [nzLoading]="isLoading" (click)="login()">
+        {{ isLoading ? 'Logging in...' : 'Log in!' }}
+      </button>
+    </nz-form-control>
+  </nz-form-item>
+</div>
+<ng-template #prefixUser><i nz-icon type="user"></i></ng-template>
+<ng-template #prefixLock><i nz-icon type="lock"></i></ng-template>

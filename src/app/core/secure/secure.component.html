@@ -5,9 +5,9 @@
       <nz-breadcrumb-item>Home</nz-breadcrumb-item>
       <nz-breadcrumb-item *ngFor="let breadcrumb of breadcrumbs">{{ breadcrumb }}</nz-breadcrumb-item>
     </nz-breadcrumb>
-    <div class="secureContent">
+    <nz-card [nzTitle]="title" [nzExtra]="extra">
       <ng-content></ng-content>
-    </div>
+    </nz-card>
   </nz-content>
   <app-footer></app-footer>
 </nz-layout>
