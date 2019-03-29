@@ -4,9 +4,10 @@
 import { Course } from "./course";
 
 export interface Student {
-  id: number;
+  studentId: number;
   firstName: string;
   lastName: string;
+  mailAddress: string;
 
   courses?: Course[];
   courseList?: Course[];

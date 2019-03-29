@@ -10,7 +10,7 @@ import { Student } from "../interfaces/student";
 export class StudentProvider {
 
   private smEntryNumber = 'smEntryNumber';
-  private apiUrl = 'tijmen.dev:1050/api/';
+  private apiUrl = 'http://145.28.145.221:8080/smalleducator_api_war/student';
   public student: Student;
 
   constructor(private http: HttpClient) {
@@ -22,44 +22,7 @@ export class StudentProvider {
    * @returns {Observable<Student>}
    */
   signInWithEntryNumber(entryNumber: string): Observable<Student> {
-    return of<Student>({
-      id: 1,
-      firstName: 'Gijs',
-      lastName: 'Min',
-      courseList: [
-        {
-          id: 123,
-          courseName: 'Architecture & Design',
-          courseCode: 'AAD123',
-          courseDescription: "The course of Architecture and Design is about explaining the design choices that must be" +
-          "made while designing a software system.\n\n" +
-          "Students work in groups to solve a real-life problem. This problem is presented in a case" +
-          "study.\nThe focus points of the solution are the wishes of the stakeholders, functional " +
-          "requirements, software quality attributes, and design patterns.",
-          teacher: {
-            id: 1,
-            firstName: 'Gijs',
-            lastName: 'Min',
-            mailAddress: 'gijs.min@hva.nl'
-          },
-          students: []
-        }
-      ]
-    }).pipe(delay(500))
-      .pipe(map((e: Student) => {
-        // If valid login, store entry number and save returned student in scope.
-        if (e.firstName) {
-          this.student = e;
-          this.storeEentryNumber(entryNumber);
-        }
-        return e;
-      }));
-
-    console.log('hoi?', entryNumber);
-
-    return this.http.post(this.apiUrl + 'student/' + entryNumber, {
-      entryNumber: entryNumber
-    }).pipe(map((e: Student) => {
+    return this.http.get(this.apiUrl + '/login/' + entryNumber).pipe(map((e: Student) => {
       // If valid login, store entry number and save returned student in scope.
       if (e.firstName) {
         this.student = e;
@@ -70,7 +33,11 @@ export class StudentProvider {
   }
 
   getStudents(): Observable<Student[]> {
-    return this.http.get(this.apiUrl + 'students');
+    return this.http.get<Student[]>(this.apiUrl + '/all');
+  }
+
+  getStudentById(id: number): Observable<Student[]> {
+    return this.http.get<Student[]>(this.apiUrl + '/id/' + id);
   }
 
 
@@ -107,5 +74,6 @@ export class StudentProvider {
    */
   removeEntryNumber(): void {
     localStorage.removeItem(this.smEntryNumber);
+    this.student = null;
   }
 }

@@ -16,10 +16,10 @@ import { SecureComponent } from './core/secure/secure.component';
 import { AuthGuard } from "./core/guards/auth-guard";
 import { AuthModule } from "./auth/auth.module";
 import { CourseListComponent } from './courses/course-list/course-list.component';
-import { CourseCreateComponent } from './courses/course-create/course-create.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { StudentsComponent } from './students/students.component';
 import { StudentListComponent } from './students/student-list/student-list.component';
+import { StudentViewComponent } from './students/student-view/student-view.component';
 
 registerLocaleData(en);
 
@@ -31,9 +31,9 @@ registerLocaleData(en);
     CourseViewComponent,
     SecureComponent,
     CourseListComponent,
-    CourseCreateComponent,
     StudentsComponent,
-    StudentListComponent
+    StudentListComponent,
+    StudentViewComponent
   ],
   imports: [
     BrowserModule,

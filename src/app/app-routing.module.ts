@@ -5,6 +5,7 @@ import { CourseViewComponent } from "./courses/course-view/course-view.component
 import { LoginComponent } from "./auth/login/login.component";
 import { CourseListComponent } from "./courses/course-list/course-list.component";
 import { StudentListComponent } from "./students/student-list/student-list.component";
+import { StudentViewComponent } from "./students/student-view/student-view.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -15,6 +16,7 @@ const routes: Routes = [
       {path: 'courses', component: CourseListComponent},
       {path: 'courses/:id', component: CourseViewComponent},
       {path: 'students', component: StudentListComponent},
+      {path: 'students/:id', component: StudentViewComponent},
     ]
   },
   {path: 'login', component: LoginComponent},

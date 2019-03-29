@@ -2,7 +2,7 @@
   <div class="headerNav">
     <h3>Small Educator</h3>
     <ul nz-menu [nzTheme]="'dark'" [nzMode]="'horizontal'" style="line-height: 64px;">
-      <li nz-menu-item routerLink="/courses" routerLinkActive="ant-menu-item-selected">Courses</li>
+      <li nz-menu-item routerLink="/courses" routerLinkActive="ant-menu-item-selected"> {{ teacherProvider.isTeacher() ? 'Courses' : 'Course' }}</li>
       <li nz-menu-item routerLink="/students" *ngIf="teacherProvider.isTeacher()"
           routerLinkActive="ant-menu-item-selected">Students</li>
       <li nz-submenu style="float:right;">

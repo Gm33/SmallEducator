@@ -1,3 +1,15 @@
-<app-secure [breadcrumbs]="['Courses', course?.courseName]" [title]="course?.courseName">
-  <p>{{ course?.courseDescription }}</p>
+<app-secure [breadcrumbs]="breadcrumbs" [title]="course?.name">
+  <h4>Course description</h4>
+  <p>{{ course?.description }}</p>
+
+  <!--<div style="margin-top:25px;" *ngIf="teacherProvider.isTeacher() && availableStudents?.length">-->
+    <!--<h4>Students</h4>-->
+    <!--<nz-select-->
+      <!--style="width: 100%"-->
+      <!--nzMode="multiple"-->
+      <!--nzPlaceHolder="Please select students to add to this course"-->
+    <!--&gt;-->
+      <!--<nz-option *ngFor="let student of availableStudents" [nzLabel]="student.student.firstName + ' ' + student.student.lastName" [nzValue]="student.student.id"></nz-option>-->
+    <!--</nz-select>-->
+  <!--</div>-->
 </app-secure>

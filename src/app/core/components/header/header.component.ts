@@ -13,7 +13,7 @@ export class HeaderComponent implements OnInit {
   name: string;
 
   constructor(private studentProvider: StudentProvider,
-              private teacherProvider: TeacherProvider,
+              public teacherProvider: TeacherProvider,
               private router: Router) {
   }
 

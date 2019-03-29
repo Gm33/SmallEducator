@@ -2,15 +2,19 @@
   <nz-list
     [nzDataSource]="courses"
     [nzItemLayout]="'horizontal'"
-    [nzLoading]="initLoading"
+    [nzLoading]="isLoading"
     [nzRenderItem]="course">
     <ng-template #course let-course>
       <nz-list-item>
         <nz-list-item-meta
+          [nzAvatar]="nzAvatar"
           [nzTitle]="nzTitle"
-          [nzDescription]="course.courseDescription">
+          [nzDescription]="course.course.description">
           <ng-template #nzTitle>
-            <a [routerLink]="['/','courses', course.id]">{{ course.courseName }}</a>
+            <a [routerLink]="['/','courses', course.course.id]">{{ course.course.name }}</a>
+          </ng-template>
+          <ng-template #nzAvatar>
+            <nz-avatar [nzText]="course.course.code" nzSize="large" [ngStyle]="{'background-color':'#1890ff'}" style="vertical-align: middle;"></nz-avatar>
           </ng-template>
         </nz-list-item-meta>
       </nz-list-item>

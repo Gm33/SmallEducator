@@ -25,7 +25,7 @@ export class CourseListComponent implements OnInit {
     description: ''
   };
 
-  isLoading = false;
+  isLoading = true;
   inputError = false;
 
   createCourseModalVisible = false;
@@ -39,15 +39,25 @@ export class CourseListComponent implements OnInit {
 
   ngOnInit() {
     if (this.teacherProvider.isTeacher()) {
-      this.courses = this.teacherProvider.teacher.courseList;
+      this.loadTeacherCourses();
     } else {
       this.courses = this.studentProvider.student.courses;
     }
-    console.log('Courses: ', this.courses);
+  }
+
+  loadTeacherCourses(): void {
+    this.courseProvider.getCourses(this.teacherProvider.teacher.id).subscribe(response => {
+      this.courses = response;
+      this.teacherProvider.teacher.courseList = response;
+      this.isLoading = false;
+    }, error => {
+      this.message.create('error', 'Oops something went wrong while loading the courses, please try again later.');
+    });
   }
 
   submitCreateCourse(): void {
     this.isLoading = true;
+    // If any required value is not set then it returns and shows an error in the create new course form.
     if (!this.newCourse.name.length || !this.newCourse.code.length || !this.newCourse.description.length) {
       this.inputError = true;
       this.isLoading = false;
@@ -55,23 +65,37 @@ export class CourseListComponent implements OnInit {
     }
 
     // Call the REST API using the Course provider.
-    this.courseProvider.createCourse(this.newCourse.name, this.newCourse.code, this.newCourse.description).subscribe(response => {
-      // If valid student response then navigate to the secure screen.
-      console.log('Response: ', response);
-      // this.router.navigate(['/courses']);
+    this.courseProvider.createCourse(this.newCourse.name, this.newCourse.code,
+      this.newCourse.description, this.teacherProvider.teacher.id).subscribe(response => {
+      // Reload the teachers courses.
+      this.loadTeacherCourses();
+      // Closes the create modal.
+      this.closeCreateCourseModal();
+      // Resets the scope variables to empty values.
+      this.newCourse = {
+        name: '',
+        code: '',
+        description: ''
+      };
+      // Sets the loading indicator to false.
       this.isLoading = false;
     }, error => {
-      console.log(error);
       // Something went wrong, which can be an internet connection problem or error code from API.
       this.isLoading = false;
       this.message.create('error', 'Something went wrong while logging in, please try again later.');
     });
   }
 
+  /**
+   * Opens the modal to create a new course
+   */
   openCreateCourseModal(): void {
     this.createCourseModalVisible = true;
   }
 
+  /**
+   * Closes the modal to create a new course
+   */
   closeCreateCourseModal(): void {
     this.createCourseModalVisible = false;
   }

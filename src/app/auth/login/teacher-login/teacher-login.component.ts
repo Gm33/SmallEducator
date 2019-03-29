@@ -37,7 +37,7 @@ export class TeacherLoginComponent {
     }
 
     // Call the REST API using the Student provider.
-    this.teacherProvider.signIn<Teacher>(this.username, this.password).subscribe(response => {
+    this.teacherProvider.signIn(this.username, this.password).subscribe(response => {
       // If valid student response then navigate to the secure screen.
       if (response.id) {
         console.log('Success!');
@@ -47,9 +47,15 @@ export class TeacherLoginComponent {
       }
       this.isLoading = false;
     }, error => {
+      console.log('ERROR: ', error);
+      // If the status code returned from the API is 400, 401 or 404 then there is something wrong with the credentials.
+      if (error.status === 404 || error.status === 400 || error.status === 401) {
+        this.message.create('error', error.error);
+      } else {
+        this.message.create('error', 'Something went wrong while logging in, please try again later.');
+      }
       // Something went wrong, which can be an internet connection problem or error code from API.
       this.isLoading = false;
-      this.message.create('error', 'Something went wrong while logging in, please try again later.');
     });
   }
 

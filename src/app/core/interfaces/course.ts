@@ -6,9 +6,9 @@ import { Student } from "./student";
 
 export interface Course {
   id: number;
-  courseName: string;
-  courseCode: string;
-  courseDescription: string;
+  name: string;
+  code: string;
+  description: string;
 
   teacher?: Teacher;
   students?: Student[];

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { Observable, of } from "rxjs/index";
-import { delay, map } from "rxjs/internal/operators";
+import { Observable } from "rxjs/index";
+import { map } from "rxjs/internal/operators";
 import { Teacher } from "../interfaces/teacher";
 import { Student } from "../interfaces/student";
 
@@ -12,7 +12,7 @@ export class TeacherProvider {
 
   // Variable name for local storage
   private smTeacherInfo = 'smTeacherInfo';
-  private apiUrl = 'tijmen.dev:1050/api/teacher/';
+  private apiUrl = 'http://145.28.145.221:8080/smalleducator_api_war/teacher';
   public teacher: Teacher;
 
   constructor(private http: HttpClient) {
@@ -24,43 +24,7 @@ export class TeacherProvider {
    * @returns {Observable<Student>}
    */
   signIn(username: string, password: string): Observable<Teacher> {
-    return of<Teacher>({
-      id: 1,
-      firstName: 'Gijs',
-      lastName: 'Min',
-      mailAddress: 'gijs.min@hva.nl',
-      courseList: [{
-        id: 123,
-        courseName: 'Architecture & Design',
-        courseCode: 'AAD123',
-        courseDescription: "The course of Architecture and Design is about explaining the design choices that must be" +
-        "made while designing a software system.\n\n" +
-        "Students work in groups to solve a real-life problem. This problem is presented in a case" +
-        "study.\nThe focus points of the solution are the wishes of the stakeholders, functional " +
-        "requirements, software quality attributes, and design patterns.",
-        teacher: {
-          id: 1,
-          firstName: 'Gijs',
-          lastName: 'Min',
-          mailAddress: 'gijs.min@hva.nl'
-        },
-        students: []
-      }]
-    }).pipe(delay(500))
-      .pipe(map((e: Teacher) => {
-        // If valid login, store teacher model to local storage.
-        console.log('ehh?', e);
-        if (e.id) {
-          this.teacher = e;
-          this.storeTeacherInformation(e);
-        }
-        return e;
-      }));
-
-    return this.http.post(this.apiUrl + '/login', {
-      username: username,
-      password: password
-    }).pipe(map((e: Teacher) => {
+    return this.http.get(this.apiUrl + '/login/' + username + '/' + password).pipe(map((e: Teacher) => {
       // If valid login, store teacher model to local storage.
       if (e.id) {
         this.teacher = e;
@@ -112,5 +76,6 @@ export class TeacherProvider {
    */
   removeTeacherInformation(): void {
     localStorage.removeItem(this.smTeacherInfo);
+    this.teacher = null;
   }
 }

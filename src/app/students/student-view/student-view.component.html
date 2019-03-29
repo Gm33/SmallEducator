@@ -1,0 +1,17 @@
+<app-secure [breadcrumbs]="['Student', student?.firstName + ' ' + student?.lastName]" [title]="student?.firstName + ' ' + student?.lastName">
+  <h4>Mail Address</h4>
+  <p>{{ student?.mailAddress }}</p>
+
+  <div style="margin-top:25px;" *ngIf="availableCourses?.length">
+    <h4>Courses</h4>
+    <nz-select
+      style="width: 100%"
+      nzMode="multiple"
+      nzPlaceHolder="Please select courses to add to this student"
+      [(ngModel)]="selectedCourses"
+      (ngModelChange)="onCoursesChange($event)"
+    >
+      <nz-option *ngFor="let course of availableCourses" [nzLabel]="course.course.name" [nzValue]="course.course.id"></nz-option>
+    </nz-select>
+  </div>
+</app-secure>

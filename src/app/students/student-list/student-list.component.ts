@@ -12,6 +12,7 @@ import { NzMessageService } from "ng-zorro-antd";
 export class StudentListComponent implements OnInit {
 
   students: Student[];
+  isLoading = true;
 
   constructor(private studentProvider: StudentProvider,
               private teacherProvider: TeacherProvider,
@@ -21,6 +22,7 @@ export class StudentListComponent implements OnInit {
     if (this.teacherProvider.isTeacher()) {
       this.studentProvider.getStudents().subscribe(response => {
         this.students = response;
+        this.isLoading = false;
       }, err => {
         this.message.create('error', 'Something went wrong while logging in, please try again later.');
       });
