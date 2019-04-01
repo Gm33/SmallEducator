@@ -4,6 +4,7 @@ import { Observable } from "rxjs/index";
 import { map } from "rxjs/internal/operators";
 import { Teacher } from "../interfaces/teacher";
 import { Student } from "../interfaces/student";
+import { SecurityProvider } from "./security.provider";
 
 @Injectable({
   providedIn: 'root'
@@ -12,10 +13,10 @@ export class TeacherProvider {
 
   // Variable name for local storage
   private smTeacherInfo = 'smTeacherInfo';
-  private apiUrl = 'http://145.28.145.221:8080/smalleducator_api_war/teacher';
+  private apiUrl = 'https://api.bscripts.dev/smalleducator-api/teacher';
   public teacher: Teacher;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private securityProvider: SecurityProvider) {
   }
 
   /**
@@ -42,7 +43,7 @@ export class TeacherProvider {
    */
   isAuthenticated(): boolean {
     return this.teacher !== undefined || localStorage.getItem(this.smTeacherInfo) !== undefined &&
-      (<Teacher>JSON.parse(localStorage.getItem(this.smTeacherInfo))).id !== undefined;
+      this.loadTeacherInformation().id !== undefined;
   }
 
   /**
@@ -51,7 +52,7 @@ export class TeacherProvider {
    * @returns {Observable<Student>}
    */
   loadTeacherProfile(): Teacher | false {
-    const teacher = <Teacher>JSON.parse(localStorage.getItem(this.smTeacherInfo));
+    const teacher = this.loadTeacherInformation();
     if (teacher && teacher.id) {
       this.teacher = teacher;
       return teacher;
@@ -64,7 +65,15 @@ export class TeacherProvider {
    * @param {number} entryNumber
    */
   storeTeacherInformation(teacher: Teacher): void {
-    localStorage.setItem(this.smTeacherInfo, JSON.stringify(teacher));
+    localStorage.setItem(this.smTeacherInfo, this.securityProvider.encryptData(teacher));
+  }
+
+  /**
+   * Loads the teacher model from the local storage and decrypts it.
+   * @returns {Teacher}
+   */
+  loadTeacherInformation(): Teacher {
+    return <Teacher>this.securityProvider.decryptData(localStorage.getItem(this.smTeacherInfo));
   }
 
   isTeacher(): boolean {

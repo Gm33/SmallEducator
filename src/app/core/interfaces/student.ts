@@ -8,6 +8,7 @@ export interface Student {
   firstName: string;
   lastName: string;
   mailAddress: string;
+  student?: any;
 
   courses?: Course[];
   courseList?: Course[];

@@ -12,7 +12,7 @@ import { Course } from "../../core/interfaces/course";
 })
 export class CourseViewComponent implements OnInit {
 
-  course: Course;
+  course: any;
   breadcrumbs: string[];
 
   availableStudents: Student[];

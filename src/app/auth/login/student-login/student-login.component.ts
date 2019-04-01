@@ -38,7 +38,7 @@ export class StudentLoginComponent {
     this.studentProvider.signInWithEntryNumber(this.entryNumber).subscribe(response => {
       // If valid student response then navigate to the secure screen.
       if (response.firstName) {
-        this.router.navigate(['/courses', response.courseId]);
+        this.router.navigate(['/courses', response['courseId']]);
       } else {
         this.message.create('error', 'You\'ve entered an incorrect entry number, please try again.');
       }

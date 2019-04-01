@@ -12,7 +12,7 @@ export class CourseProvider {
 
   // Variable name for local storage
   private smTeacherInfo = 'smTeacherInfo';
-  private apiUrl = 'http://145.28.145.221:8080/smalleducator_api_war/course';
+  private apiUrl = 'https://api.bscripts.dev/smalleducator-api/course';
   public teacher: Teacher;
 
   constructor(private http: HttpClient) {

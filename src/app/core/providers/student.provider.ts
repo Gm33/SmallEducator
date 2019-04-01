@@ -10,7 +10,7 @@ import { Student } from "../interfaces/student";
 export class StudentProvider {
 
   private smEntryNumber = 'smEntryNumber';
-  private apiUrl = 'http://145.28.145.221:8080/smalleducator_api_war/student';
+  private apiUrl = 'https://api.bscripts.dev/smalleducator-api/student';
   public student: Student;
 
   constructor(private http: HttpClient) {
