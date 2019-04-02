@@ -15,10 +15,12 @@ export class StudentListComponent implements OnInit {
   isLoading = true;
 
   newStudent: {
-    name: string,
+    firstName: string,
+    lastName: string,
     mail: string
   } = {
-    name: '',
+    firstName: '',
+    lastName: '',
     mail: ''
   };
 
@@ -27,18 +29,24 @@ export class StudentListComponent implements OnInit {
 
   constructor(private studentProvider: StudentProvider,
               private teacherProvider: TeacherProvider,
-              public message: NzMessageService) { }
+              public message: NzMessageService) {
+  }
 
   ngOnInit() {
     if (this.teacherProvider.isTeacher()) {
-      this.studentProvider.getStudents().subscribe(response => {
-        this.students = response;
-        this.isLoading = false;
-      }, err => {
-        this.message.create('error', 'Something went wrong while logging in, please try again later.');
-      });
+      this.loadStudents();
     }
   }
+
+  private loadStudents(): void {
+    this.studentProvider.getStudents().subscribe(response => {
+      this.students = response['students'];
+      this.isLoading = false;
+    }, err => {
+      this.message.create('error', 'Something went wrong while logging in, please try again later.');
+    });
+  }
+
 
   // Create student
 
@@ -64,7 +72,7 @@ export class StudentListComponent implements OnInit {
     this.isLoading = true;
 
     // If any required value is not set then it returns and shows an error in the create new student form.
-    if (!this.newStudent.name.length || !this.newStudent.mail.length) {
+    if (!this.newStudent.firstName.length || !this.newStudent.lastName.length) {
       this.inputError = true;
       this.isLoading = false;
       return;
@@ -72,12 +80,34 @@ export class StudentListComponent implements OnInit {
 
     // Loop through students to see if any mail matches the newly given mail address. If so, show an error.
     this.students.forEach(student => {
-      if (student.student.mailAddress == this.newStudent.mail) {
+      if (student.mailAddress == this.newStudent.mail) {
         this.inputError = true;
         this.isLoading = false;
         return this.message.error('The given mail address does already exists, please modify and try again.');
       }
     });
+
+    if (!this.inputError) {
+      // Call the REST API using the Course provider.
+      this.studentProvider.createStudent(this.newStudent.firstName, this.newStudent.lastName, this.newStudent.mail).subscribe(response => {
+        // Reload the teachers courses.
+        this.loadStudents();
+        // Closes the create modal.
+        this.closeCreateStudentModal();
+        // Resets the scope variables to empty values.
+        this.newStudent = {
+          firstName: '',
+          lastName: '',
+          mail: ''
+        };
+        // Sets the loading indicator to false.
+        this.isLoading = false;
+      }, error => {
+        // Something went wrong, which can be an internet connection problem or error code from API.
+        this.isLoading = false;
+        this.message.create('error', 'Something went wrong while creating the student, please try again later.');
+      });
+    }
   }
 
   /**
@@ -85,9 +115,13 @@ export class StudentListComponent implements OnInit {
    * The method will remove the error message when the required fields are entered.
    */
   onValueChange(): void {
-    if (this.inputError && this.newStudent.name.length && this.newStudent.mail.length) {
+    if (this.inputError && this.newStudent.firstName.length && this.newStudent.lastName.length && this.newStudent.mail.length) {
       this.inputError = false;
     }
+  }
+
+  getAvatarText(string: string): string {
+    return string.substring(0, 5);
   }
 
 }

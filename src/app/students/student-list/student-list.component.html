@@ -9,13 +9,12 @@
         <nz-list-item-meta
           [nzAvatar]="nzAvatar"
           [nzTitle]="nzTitle"
-          [nzDescription]="student.student.mailAddress">
+          [nzDescription]="student.mailAddress">
           <ng-template #nzTitle>
-            <a [routerLink]="['/','students', student.student.id]">{{ student.student.firstName + ' ' +
-              student.student.lastName }}</a>
+            <a [routerLink]="['/','students', student.id]">{{ student.firstName + ' ' + student.lastName }}</a>
           </ng-template>
           <ng-template #nzAvatar>
-            <nz-avatar [nzText]="student.student.id" nzSize="large" [ngStyle]="{'background-color':'#1890ff'}"
+            <nz-avatar [nzText]="getAvatarText(student.id)" nzSize="large" [ngStyle]="{'background-color':'#1890ff'}"
                        style="vertical-align: middle;"></nz-avatar>
           </ng-template>
         </nz-list-item-meta>
@@ -33,13 +32,23 @@
            (nzOnClose)="closeCreateStudentModal()">
   <form nz-form>
     <nz-form-item>
-      <nz-form-label>Student Name</nz-form-label>
+      <nz-form-label>First Name</nz-form-label>
       <nz-form-control>
-        <input nz-input [(ngModel)]="newStudent.name" (ngModelChange)="onValueChange()"
-               name="courseName" placeholder="Please enter the student's name">
+        <input nz-input [(ngModel)]="newStudent.firstName" (ngModelChange)="onValueChange()"
+               name="firstName" placeholder="Please enter the student's first name">
       </nz-form-control>
-      <nz-form-explain *ngIf="inputError && !newStudent.name?.length">
-        Please input a student name!
+      <nz-form-explain *ngIf="inputError && !newStudent.firstName?.length">
+        Please input the student's first name!
+      </nz-form-explain>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label>Last Name</nz-form-label>
+      <nz-form-control>
+        <input nz-input [(ngModel)]="newStudent.lastName" (ngModelChange)="onValueChange()"
+               name="lastName" placeholder="Please enter the student's last name">
+      </nz-form-control>
+      <nz-form-explain *ngIf="inputError && !newStudent.lastName?.length">
+        Please input the student's last name!
       </nz-form-explain>
     </nz-form-item>
     <nz-form-item>

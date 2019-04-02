@@ -12,14 +12,14 @@ export class CourseProvider {
 
   // Variable name for local storage
   private smTeacherInfo = 'smTeacherInfo';
-  private apiUrl = 'https://api.bscripts.dev/smalleducator-api/course';
+  private apiUrl = 'http://api.smalleducator.test/api/courses';
   public teacher: Teacher;
 
   constructor(private http: HttpClient) {
   }
 
   getCourses(teacherId: number): Observable<Course[]> {
-    return this.http.get<Course[]>(this.apiUrl + '/teacher/' + teacherId);
+    return this.http.get<Course[]>(this.apiUrl + '/' + teacherId);
   }
 
   /**

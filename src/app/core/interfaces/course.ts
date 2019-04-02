@@ -5,7 +5,7 @@ import { Teacher } from "./teacher";
 import { Student } from "./student";
 
 export interface Course {
-  id: number;
+  id: string;
   name: string;
   code: string;
   description: string;

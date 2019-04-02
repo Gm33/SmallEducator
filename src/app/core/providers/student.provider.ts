@@ -10,7 +10,7 @@ import { Student } from "../interfaces/student";
 export class StudentProvider {
 
   private smEntryNumber = 'smEntryNumber';
-  private apiUrl = 'https://api.bscripts.dev/smalleducator-api/student';
+  private apiUrl = 'http://api.smalleducator.test/api/students';
   public student: Student;
 
   constructor(private http: HttpClient) {
@@ -22,10 +22,12 @@ export class StudentProvider {
    * @returns {Observable<Student>}
    */
   signInWithEntryNumber(entryNumber: string): Observable<Student> {
-    return this.http.get(this.apiUrl + '/login/' + entryNumber).pipe(map((e: Student) => {
+    return this.http.post(this.apiUrl + '/login', {
+      entryNumber: entryNumber
+    }).pipe(map((e: Student) => {
       // If valid login, store entry number and save returned student in scope.
-      if (e.firstName) {
-        this.student = e;
+      if (e['success']) {
+        this.student = e['student'];
         this.storeEentryNumber(entryNumber);
       }
       return e;
@@ -33,11 +35,30 @@ export class StudentProvider {
   }
 
   getStudents(): Observable<Student[]> {
-    return this.http.get<Student[]>(this.apiUrl + '/all');
+    return this.http.get<Student[]>(this.apiUrl);
   }
 
   getStudentById(id: number): Observable<Student[]> {
-    return this.http.get<Student[]>(this.apiUrl + '/id/' + id);
+    return this.http.get<Student[]>(this.apiUrl + '/' + id);
+  }
+
+  /**
+   * HTTP Method to post course information to the REST API which returns a course model (if course created)
+   * @param {number} entryNumber
+   * @returns {Observable<Student>}
+   */
+  createStudent(firstName: string, lastName: string,  mailAddress: string): Observable<Object> {
+    return this.http.post(this.apiUrl, {
+      firstName: firstName,
+      lastName: lastName,
+      mailAddress: mailAddress
+    });
+  }
+
+  attachCourses(studentId: string, courses: number[]): Observable<Object> {
+    return this.http.post(this.apiUrl + '/courses/' + studentId, {
+      courses: courses
+    });
   }
 
 

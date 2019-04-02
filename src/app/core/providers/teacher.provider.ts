@@ -12,8 +12,8 @@ import { SecurityProvider } from "./security.provider";
 export class TeacherProvider {
 
   // Variable name for local storage
-  private smTeacherInfo = 'smTeacherInfo';
-  private apiUrl = 'https://api.bscripts.dev/smalleducator-api/teacher';
+  smTeacherInfo = 'smTeacherInfo';
+  private apiUrl = 'http://api.smalleducator.test/api/teachers';
   public teacher: Teacher;
 
   constructor(private http: HttpClient, private securityProvider: SecurityProvider) {
@@ -25,13 +25,17 @@ export class TeacherProvider {
    * @returns {Observable<Student>}
    */
   signIn(username: string, password: string): Observable<Teacher> {
-    return this.http.get(this.apiUrl + '/login/' + username + '/' + password).pipe(map((e: Teacher) => {
+    return this.http.post(this.apiUrl + '/login', {
+      username: username,
+      password: password
+    }).pipe(map((e: Teacher) => {
       // If valid login, store teacher model to local storage.
-      if (e.id) {
-        this.teacher = e;
-        this.storeTeacherInformation(e);
+      if (e['success']) {
+        this.teacher = e['teacher'];
+        this.storeTeacherInformation(e['teacher']);
+        return e['teacher'];
       }
-      return e;
+      return false;
     }));
   }
 
@@ -42,8 +46,8 @@ export class TeacherProvider {
    * @returns {boolean}
    */
   isAuthenticated(): boolean {
-    return this.teacher !== undefined || localStorage.getItem(this.smTeacherInfo) !== undefined &&
-      this.loadTeacherInformation().id !== undefined;
+    return this.teacher !== undefined || (localStorage.getItem(this.smTeacherInfo) !== undefined &&
+      this.loadTeacherInformation().id !== undefined);
   }
 
   /**

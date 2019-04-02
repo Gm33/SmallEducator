@@ -25,19 +25,20 @@ export class StudentViewComponent implements OnInit {
   ngOnInit() {
     this.activeRoute.params.subscribe(param => {
       this.studentProvider.getStudentById(param['id']).subscribe(response => {
-        this.student = response[0].student;
-        this.selectedCourses = response[0].courses.map(course => course.id);
-        console.log(this.student, this.selectedCourses);
+        this.student = response['student']
+        // this.selectedCourses = response[0].courses.map(course => course.id);
+        console.log(response, this.student, this.selectedCourses);
       });
       this.courseProvider.getCourses(this.teacherProvider.teacher.id).subscribe(response => {
-        this.availableCourses = response;
+        this.availableCourses = response['courses'];
       });
     });
 
   }
 
   onCoursesChange(event) {
-    console.log(event);
+    this.studentProvider.attachCourses(this.student.id, event).subscribe(response => {
+    });
   }
 
 }

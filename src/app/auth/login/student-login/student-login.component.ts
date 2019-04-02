@@ -37,8 +37,8 @@ export class StudentLoginComponent {
     // Call the REST API using the Student provider.
     this.studentProvider.signInWithEntryNumber(this.entryNumber).subscribe(response => {
       // If valid student response then navigate to the secure screen.
-      if (response.firstName) {
-        this.router.navigate(['/courses', response['courseId']]);
+      if (response['success']) {
+        this.router.navigate(['/courses']);
       } else {
         this.message.create('error', 'You\'ve entered an incorrect entry number, please try again.');
       }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate } from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
 import { StudentProvider } from "../providers/student.provider";
 import { Observable, of } from "rxjs/index";
 import { map } from "rxjs/internal/operators";
@@ -29,12 +29,13 @@ export class AuthGuard implements CanActivate {
     }
 
     // If a teacher profile can be loaded, then allow to continue
-    if (this.teacherProvider.loadTeacherProfile()) {
+    if (localStorage.getItem(this.teacherProvider.smTeacherInfo) !== null && this.teacherProvider.loadTeacherProfile()) {
       return of(true);
+    } else {
+      // Log student in by using the stored entry code.
+      return this.studentProvider.loadStudentProfile().pipe(map(response => {
+        return response['success']
+      }));
     }
-    // Log student in by using the stored entry code.
-    return this.studentProvider.loadStudentProfile().pipe(map(response => {
-      return response.firstName ? true : false;
-    }))
   }
 }

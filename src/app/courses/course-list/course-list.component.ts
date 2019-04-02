@@ -42,13 +42,15 @@ export class CourseListComponent implements OnInit {
       this.loadTeacherCourses();
     } else {
       this.courses = this.studentProvider.student.courses;
+      this.isLoading = false;
     }
   }
 
   loadTeacherCourses(): void {
     this.courseProvider.getCourses(this.teacherProvider.teacher.id).subscribe(response => {
-      this.courses = response;
-      this.teacherProvider.teacher.courseList = response;
+      console.log(response['courses']);
+      this.courses = response['courses'];
+      this.teacherProvider.teacher.courses = response['courses'];
       this.isLoading = false;
     }, error => {
       this.message.create('error', 'Oops something went wrong while loading the courses, please try again later.');
@@ -109,6 +111,10 @@ export class CourseListComponent implements OnInit {
     if (this.inputError && this.newCourse.name.length && this.newCourse.code.length && this.newCourse.description.length) {
       this.inputError = false;
     }
+  }
+
+  getShortCourseDescription(description: string): string {
+    return description.substr(0, 135);
   }
 
 }
